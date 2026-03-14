@@ -1,0 +1,756 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Anchor Moorings — River Bure, Coltishall, Norfolk</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            slate:    { DEFAULT: '#5e6c6c', dark: '#3a4a4a', deeper: '#1e2c2c', mid: '#7a9090', light: '#c5d8d8', xlight: '#eef5f5' },
+            gold:     { DEFAULT: '#c4a35a', light: '#e8d5a3', dark: '#9e7e38' },
+          },
+          fontFamily: {
+            display: ['"Playfair Display"', 'Georgia', 'serif'],
+            body:    ['Inter', 'system-ui', 'sans-serif'],
+          },
+          letterSpacing: { tighter2: '-0.03em' },
+          lineHeight:    { relaxed2: '1.7' },
+        }
+      }
+    }
+  </script>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body { font-family: 'Inter', system-ui, sans-serif; background: #f8fafa; color: #1e2c2c; }
+
+    /* Grain texture */
+    .grain::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    /* Nav */
+    #nav { transition: background 0.4s cubic-bezier(0.4,0,0.2,1), box-shadow 0.4s cubic-bezier(0.4,0,0.2,1); }
+    #nav.scrolled { background: rgba(30,44,44,0.97); box-shadow: 0 4px 40px rgba(0,0,0,0.25); }
+
+    /* Nav links */
+    .nav-link { position: relative; }
+    .nav-link::after { content: ''; position: absolute; left: 0; bottom: -2px; width: 0; height: 1px; background: #c4a35a; transition: width 0.3s cubic-bezier(0.4,0,0.2,1); }
+    .nav-link:hover::after, .nav-link:focus-visible::after { width: 100%; }
+    .nav-link:focus-visible { outline: 2px solid #c4a35a; outline-offset: 4px; border-radius: 2px; }
+    .nav-link:active { opacity: 0.7; }
+
+    /* Hero */
+    .hero-img { object-fit: cover; width: 100%; height: 100%; filter: saturate(0.85) brightness(0.7); }
+
+    /* Section headings */
+    .section-label { font-family: 'Inter', sans-serif; font-size: 0.7rem; font-weight: 600; letter-spacing: 0.18em; text-transform: uppercase; color: #c4a35a; }
+    .section-title { font-family: 'Playfair Display', Georgia, serif; letter-spacing: -0.03em; line-height: 1.15; }
+
+    /* Cards */
+    .card { transition: transform 0.35s cubic-bezier(0.34,1.56,0.64,1), box-shadow 0.35s cubic-bezier(0.34,1.56,0.64,1); }
+    .card:hover { transform: translateY(-4px); }
+
+    /* Buttons */
+    .btn-primary { background: #5e6c6c; color: #fff; padding: 0.75rem 2rem; font-family: 'Inter', sans-serif; font-size: 0.875rem; font-weight: 500; letter-spacing: 0.06em; text-transform: uppercase; border-radius: 2px; transition: background 0.25s cubic-bezier(0.4,0,0.2,1), transform 0.2s cubic-bezier(0.4,0,0.2,1), box-shadow 0.25s cubic-bezier(0.4,0,0.2,1); display: inline-block; }
+    .btn-primary:hover { background: #3a4a4a; transform: translateY(-1px); box-shadow: 0 8px 24px rgba(94,108,108,0.3); }
+    .btn-primary:focus-visible { outline: 2px solid #c4a35a; outline-offset: 3px; }
+    .btn-primary:active { transform: translateY(0); }
+
+    .btn-outline { background: transparent; color: #5e6c6c; padding: 0.75rem 2rem; font-family: 'Inter', sans-serif; font-size: 0.875rem; font-weight: 500; letter-spacing: 0.06em; text-transform: uppercase; border-radius: 2px; border: 1.5px solid #5e6c6c; transition: background 0.25s cubic-bezier(0.4,0,0.2,1), color 0.25s, transform 0.2s cubic-bezier(0.4,0,0.2,1); display: inline-block; }
+    .btn-outline:hover { background: #5e6c6c; color: #fff; transform: translateY(-1px); }
+    .btn-outline:focus-visible { outline: 2px solid #c4a35a; outline-offset: 3px; }
+    .btn-outline:active { transform: translateY(0); }
+
+    .btn-gold { background: #c4a35a; color: #1e2c2c; padding: 0.875rem 2.5rem; font-family: 'Inter', sans-serif; font-size: 0.875rem; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; border-radius: 2px; transition: background 0.25s cubic-bezier(0.4,0,0.2,1), transform 0.2s cubic-bezier(0.4,0,0.2,1), box-shadow 0.25s; display: inline-block; }
+    .btn-gold:hover { background: #9e7e38; transform: translateY(-1px); box-shadow: 0 8px 24px rgba(196,163,90,0.4); }
+    .btn-gold:focus-visible { outline: 2px solid #5e6c6c; outline-offset: 3px; }
+    .btn-gold:active { transform: translateY(0); }
+
+    /* Facility icons */
+    .facility-icon { width: 48px; height: 48px; border-radius: 50%; background: #eef5f5; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+
+    /* Form inputs */
+    .form-input { width: 100%; padding: 0.75rem 1rem; background: rgba(255,255,255,0.07); border: 1px solid rgba(197,216,216,0.25); border-radius: 2px; color: #eef5f5; font-family: 'Inter', sans-serif; font-size: 0.9rem; transition: border-color 0.2s, background 0.2s; }
+    .form-input::placeholder { color: rgba(197,216,216,0.45); }
+    .form-input:focus { outline: none; border-color: #c4a35a; background: rgba(255,255,255,0.1); }
+    .form-label { font-family: 'Inter', sans-serif; font-size: 0.75rem; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; color: #c5d8d8; margin-bottom: 0.4rem; display: block; }
+    select.form-input option { background: #1e2c2c; color: #eef5f5; }
+
+    /* Divider */
+    .gold-divider { width: 48px; height: 2px; background: linear-gradient(90deg, #c4a35a, #e8d5a3); border-radius: 1px; }
+
+    /* Scroll fade-in */
+    .fade-in { opacity: 0; transform: translateY(24px); transition: opacity 0.7s cubic-bezier(0.4,0,0.2,1), transform 0.7s cubic-bezier(0.4,0,0.2,1); }
+    .fade-in.visible { opacity: 1; transform: translateY(0); }
+
+    /* Image overlay treatment */
+    .img-treatment { position: relative; overflow: hidden; }
+    .img-treatment::before { content: ''; position: absolute; inset: 0; background: linear-gradient(to top, rgba(30,44,44,0.65) 0%, transparent 55%); z-index: 1; pointer-events: none; }
+    .img-treatment .blend-layer { position: absolute; inset: 0; background: rgba(94,108,108,0.15); mix-blend-mode: multiply; z-index: 2; pointer-events: none; }
+
+    /* Mooring type toggle */
+    .tab-btn { padding: 0.6rem 1.5rem; font-family: 'Inter', sans-serif; font-size: 0.8rem; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; border-radius: 1px; border: 1.5px solid #c5d8d8; color: #5e6c6c; background: transparent; cursor: pointer; transition: background 0.2s, color 0.2s, border-color 0.2s; }
+    .tab-btn.active { background: #5e6c6c; color: #fff; border-color: #5e6c6c; }
+    .tab-btn:hover:not(.active) { background: #eef5f5; }
+    .tab-btn:focus-visible { outline: 2px solid #c4a35a; outline-offset: 3px; }
+
+    /* Mobile menu */
+    #mobile-menu { transition: opacity 0.3s cubic-bezier(0.4,0,0.2,1), transform 0.3s cubic-bezier(0.4,0,0.2,1); }
+  </style>
+</head>
+<body class="antialiased">
+
+  <!-- ═══════════════════════════════ NAV ═══════════════════════════════ -->
+  <nav id="nav" class="fixed top-0 left-0 right-0 z-50 px-6 md:px-12 py-5 flex items-center justify-between">
+    <!-- Logo -->
+    <a href="#hero" aria-label="Anchor Moorings home" class="flex-shrink-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-gold-DEFAULT rounded group">
+      <span class="font-display font-medium text-white text-xl tracking-tight group-hover:text-white/80 transition-colors" style="font-family:'Playfair Display',Georgia,serif; letter-spacing:-0.02em">Anchor Moorings</span>
+    </a>
+
+    <!-- Desktop nav -->
+    <div class="hidden md:flex items-center gap-8">
+      <a href="#moorings"  class="nav-link text-white/80 hover:text-white text-sm font-medium tracking-wide transition-colors duration-200" style="font-family:'Inter',sans-serif">Moorings</a>
+      <a href="#visitors"  class="nav-link text-white/80 hover:text-white text-sm font-medium tracking-wide transition-colors duration-200" style="font-family:'Inter',sans-serif">Visitors</a>
+      <a href="#facilities" class="nav-link text-white/80 hover:text-white text-sm font-medium tracking-wide transition-colors duration-200" style="font-family:'Inter',sans-serif">Facilities</a>
+      <a href="#location"  class="nav-link text-white/80 hover:text-white text-sm font-medium tracking-wide transition-colors duration-200" style="font-family:'Inter',sans-serif">Location</a>
+      <a href="#about"     class="nav-link text-white/80 hover:text-white text-sm font-medium tracking-wide transition-colors duration-200" style="font-family:'Inter',sans-serif">About</a>
+      <a href="#contact"   class="btn-gold text-xs ml-4">Enquire</a>
+    </div>
+
+    <!-- Mobile hamburger -->
+    <button id="menu-toggle" aria-label="Open menu" aria-expanded="false" class="md:hidden text-white p-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold rounded">
+      <svg id="menu-icon-open"  width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><line x1="3" y1="6"  x2="21" y2="6" /><line x1="3" y1="12" x2="21" y2="12" /><line x1="3" y1="18" x2="21" y2="18" /></svg>
+      <svg id="menu-icon-close" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" class="hidden"><line x1="4" y1="4" x2="20" y2="20" /><line x1="20" y1="4" x2="4" y2="20" /></svg>
+    </button>
+  </nav>
+
+  <!-- Mobile menu -->
+  <div id="mobile-menu" class="fixed inset-0 z-40 opacity-0 pointer-events-none" style="transform:translateY(-8px)">
+    <div class="absolute inset-0" style="background:rgba(30,44,44,0.98)"></div>
+    <div class="relative z-10 flex flex-col items-center justify-center h-full gap-8 text-center">
+      <a href="#moorings"   class="text-white text-2xl font-display tracking-tight" onclick="closeMenu()">Moorings</a>
+      <a href="#visitors"   class="text-white text-2xl font-display tracking-tight" onclick="closeMenu()">Visitors</a>
+      <a href="#facilities" class="text-white text-2xl font-display tracking-tight" onclick="closeMenu()">Facilities</a>
+      <a href="#location"   class="text-white text-2xl font-display tracking-tight" onclick="closeMenu()">Location</a>
+      <a href="#about"      class="text-white text-2xl font-display tracking-tight" onclick="closeMenu()">About</a>
+      <a href="#contact"    class="btn-gold mt-4" onclick="closeMenu()">Enquire Now</a>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════ HERO ══════════════════════════════ -->
+  <section id="hero" class="relative h-screen min-h-[620px] flex items-end overflow-hidden grain">
+    <!-- Background image -->
+    <div class="absolute inset-0">
+      <img src="https://placehold.co/1920x1080/3a4a4a/5e6c6c?text=." alt="" class="hero-img" />
+      <!-- Multi-layer gradient -->
+      <div class="absolute inset-0" style="background: radial-gradient(ellipse at 60% 40%, rgba(94,108,108,0.18) 0%, transparent 65%), radial-gradient(ellipse at 20% 80%, rgba(30,44,44,0.6) 0%, transparent 55%), linear-gradient(to top, rgba(15,25,25,0.92) 0%, rgba(15,25,25,0.4) 45%, rgba(15,25,25,0.05) 100%)"></div>
+    </div>
+
+    <!-- Content -->
+    <div class="relative z-10 w-full max-w-7xl mx-auto px-6 md:px-12 pb-20 md:pb-28">
+      <div class="max-w-2xl">
+        <p class="section-label mb-5">River Bure · Coltishall · Norfolk Broads</p>
+        <h1 class="section-title text-white text-5xl md:text-7xl font-display font-medium mb-6" style="letter-spacing:-0.03em; line-height:1.05">
+          A quiet place<br/>on the river
+        </h1>
+        <p class="text-white/70 text-lg mb-10 max-w-lg" style="line-height:1.7; font-family:'Inter',sans-serif">
+          Private riverside moorings on the upper River Bure — a sheltered, landscaped setting within the Norfolk Broads National Park.
+        </p>
+        <div class="flex flex-wrap gap-4">
+          <a href="#moorings" class="btn-gold">Explore Moorings</a>
+          <a href="#contact"  class="btn-outline" style="color:#fff; border-color:rgba(255,255,255,0.4)">Get in Touch</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Scroll hint -->
+    <div class="absolute bottom-8 left-1/2 -translate-x-1/2 z-10 flex flex-col items-center gap-2 opacity-50">
+      <span class="text-white text-xs tracking-widest uppercase" style="font-family:'Inter',sans-serif">Scroll</span>
+      <svg width="1" height="40" viewBox="0 0 1 40"><line x1="0.5" y1="0" x2="0.5" y2="40" stroke="white" stroke-width="1" stroke-dasharray="3 4"/></svg>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════ OVERVIEW ══════════════════════════ -->
+  <section class="py-24 md:py-32 bg-white">
+    <div class="max-w-7xl mx-auto px-6 md:px-12">
+      <div class="grid md:grid-cols-2 gap-16 md:gap-24 items-center">
+
+        <div class="fade-in">
+          <p class="section-label mb-4">Welcome</p>
+          <div class="gold-divider mb-6"></div>
+          <h2 class="section-title text-4xl md:text-5xl font-display font-medium text-slate-deeper mb-6">
+            Your home on the<br/>Norfolk Broads
+          </h2>
+          <p class="text-slate-dark/80 mb-5" style="line-height:1.7; font-family:'Inter',sans-serif; font-size:1.0625rem">
+            Anchor Moorings is a privately owned riverside site on the River Bure in Coltishall — offering long-term private moorings and a small number of short-stay visitor berths in a quiet, well-maintained setting.
+          </p>
+          <p class="text-slate-dark/70 mb-8" style="line-height:1.7; font-family:'Inter',sans-serif">
+            Nestled within the Norfolk Broads National Park, the site sits just before Coltishall Common. It's sheltered from prevailing winds, has minimal tidal variation, and connects you to some of the finest cruising on the upper Bure — between Coltishall and Wroxham.
+          </p>
+          <a href="#moorings" class="btn-primary">View Our Moorings</a>
+        </div>
+
+        <div class="fade-in grid grid-cols-2 gap-4">
+          <div class="img-treatment rounded-sm overflow-hidden" style="height:280px">
+            <img src="https://placehold.co/600x560/5e6c6c/c5d8d8?text=." alt="River view at Anchor Moorings" class="w-full h-full object-cover" />
+            <div class="blend-layer"></div>
+          </div>
+          <div class="flex flex-col gap-4">
+            <div class="img-treatment rounded-sm overflow-hidden" style="height:132px">
+              <img src="https://placehold.co/600x264/3a4a4a/8fa8a8?text=." alt="Mooring quay" class="w-full h-full object-cover" />
+              <div class="blend-layer"></div>
+            </div>
+            <div class="img-treatment rounded-sm overflow-hidden" style="height:132px">
+              <img src="https://placehold.co/600x264/7a9090/eef5f5?text=." alt="Norfolk Broads scenery" class="w-full h-full object-cover" />
+              <div class="blend-layer"></div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════ STATS ════════════════════════════ -->
+  <section class="py-16 relative overflow-hidden" style="background:#1e2c2c">
+    <div class="absolute inset-0" style="background: radial-gradient(ellipse at 80% 50%, rgba(94,108,108,0.18) 0%, transparent 60%), radial-gradient(ellipse at 20% 50%, rgba(196,163,90,0.06) 0%, transparent 50%)"></div>
+    <div class="relative z-10 max-w-7xl mx-auto px-6 md:px-12 grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
+      <div class="fade-in">
+        <p class="section-title text-white text-4xl md:text-5xl font-display font-medium mb-2">30+</p>
+        <p class="text-slate-light/60 text-sm tracking-wide uppercase" style="font-family:'Inter',sans-serif">Years Established</p>
+      </div>
+      <div class="fade-in">
+        <p class="section-title text-white text-4xl md:text-5xl font-display font-medium mb-2">2</p>
+        <p class="text-slate-light/60 text-sm tracking-wide uppercase" style="font-family:'Inter',sans-serif">Private Dykes</p>
+      </div>
+      <div class="fade-in">
+        <p class="section-title text-gold text-4xl md:text-5xl font-display font-medium mb-2">£15</p>
+        <p class="text-slate-light/60 text-sm tracking-wide uppercase" style="font-family:'Inter',sans-serif">Per Night, Visitors</p>
+      </div>
+      <div class="fade-in">
+        <p class="section-title text-white text-4xl md:text-5xl font-display font-medium mb-2">NP</p>
+        <p class="text-slate-light/60 text-sm tracking-wide uppercase" style="font-family:'Inter',sans-serif">National Park</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════ MOORINGS ══════════════════════════ -->
+  <section id="moorings" class="py-24 md:py-32" style="background:#f8fafa">
+    <div class="max-w-7xl mx-auto px-6 md:px-12">
+      <div class="max-w-xl mb-16 fade-in">
+        <p class="section-label mb-4">Private Moorings</p>
+        <div class="gold-divider mb-6"></div>
+        <h2 class="section-title text-4xl md:text-5xl font-display font-medium text-slate-deeper mb-5">
+          Long-term berths on the River Bure
+        </h2>
+        <p class="text-slate-dark/75" style="line-height:1.7; font-family:'Inter',sans-serif">
+          We offer annual private moorings for boat owners looking for a settled, secure base on the upper Broads. Mooring positions are allocated based on vessel size and availability, with fees calculated by boat length and berth type.
+        </p>
+      </div>
+
+      <!-- Mooring types -->
+      <div class="grid md:grid-cols-3 gap-6">
+        <!-- Card 1 -->
+        <div class="card bg-white rounded-sm overflow-hidden fade-in" style="box-shadow: 0 2px 8px rgba(30,44,44,0.06), 0 16px 40px rgba(30,44,44,0.08)">
+          <div class="img-treatment" style="height:200px">
+            <img src="https://placehold.co/600x400/3a4a4a/8fa8a8?text=." alt="Main river moorings" class="w-full h-full object-cover" />
+            <div class="blend-layer"></div>
+          </div>
+          <div class="p-6">
+            <p class="section-label mb-2">Main River</p>
+            <h3 class="section-title text-xl font-display font-medium text-slate-deeper mb-3">River Frontage Berths</h3>
+            <p class="text-slate-dark/70 text-sm mb-4" style="line-height:1.7; font-family:'Inter',sans-serif">
+              Extensive quay headings along the main River Bure for vessels 25ft and over. Secure mooring rings, landscaped surrounds, and easy embarkation access.
+            </p>
+            <ul class="text-sm text-slate-dark/65 space-y-1.5" style="font-family:'Inter',sans-serif">
+              <li class="flex items-center gap-2"><span class="text-gold font-bold">—</span> Secure quay headings with rings</li>
+              <li class="flex items-center gap-2"><span class="text-gold font-bold">—</span> Optional electric hook-up</li>
+              <li class="flex items-center gap-2"><span class="text-gold font-bold">—</span> Annual fee by boat length</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Card 2 -->
+        <div class="card bg-white rounded-sm overflow-hidden fade-in" style="box-shadow: 0 2px 8px rgba(30,44,44,0.06), 0 16px 40px rgba(30,44,44,0.08)">
+          <div class="img-treatment" style="height:200px">
+            <img src="https://placehold.co/600x400/5e6c6c/c5d8d8?text=." alt="Dyke moorings" class="w-full h-full object-cover" />
+            <div class="blend-layer"></div>
+          </div>
+          <div class="p-6">
+            <p class="section-label mb-2">Main Dyke</p>
+            <h3 class="section-title text-xl font-display font-medium text-slate-deeper mb-3">Dyke Berths</h3>
+            <p class="text-slate-dark/70 text-sm mb-4" style="line-height:1.7; font-family:'Inter',sans-serif">
+              Side-on and stern-on configurations within our sheltered on-site dyke, featuring oak quay headings and individually metered electricity points.
+            </p>
+            <ul class="text-sm text-slate-dark/65 space-y-1.5" style="font-family:'Inter',sans-serif">
+              <li class="flex items-center gap-2"><span class="text-gold font-bold">—</span> Oak quay headings</li>
+              <li class="flex items-center gap-2"><span class="text-gold font-bold">—</span> Metered electricity available</li>
+              <li class="flex items-center gap-2"><span class="text-gold font-bold">—</span> Side-on &amp; stern-on options</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Card 3 -->
+        <div class="card bg-white rounded-sm overflow-hidden fade-in" style="box-shadow: 0 2px 8px rgba(30,44,44,0.06), 0 16px 40px rgba(30,44,44,0.08)">
+          <div class="img-treatment" style="height:200px">
+            <img src="https://placehold.co/600x400/7a9090/eef5f5?text=." alt="Small boat moorings" class="w-full h-full object-cover" />
+            <div class="blend-layer"></div>
+          </div>
+          <div class="p-6">
+            <p class="section-label mb-2">Small Boat Dyke</p>
+            <h3 class="section-title text-xl font-display font-medium text-slate-deeper mb-3">Smaller Craft Berths</h3>
+            <p class="text-slate-dark/70 text-sm mb-4" style="line-height:1.7; font-family:'Inter',sans-serif">
+              Dedicated moorings for day boats and vessels under 25ft, with grass bank and quay heading options in a quieter, more sheltered cut.
+            </p>
+            <ul class="text-sm text-slate-dark/65 space-y-1.5" style="font-family:'Inter',sans-serif">
+              <li class="flex items-center gap-2"><span class="text-gold font-bold">—</span> Grass bank or quay heading</li>
+              <li class="flex items-center gap-2"><span class="text-gold font-bold">—</span> Ideal for vessels under 25ft</li>
+              <li class="flex items-center gap-2"><span class="text-gold font-bold">—</span> Day boat friendly</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- Waiting list note -->
+      <div class="mt-12 p-6 md:p-8 rounded-sm fade-in flex flex-col md:flex-row items-start md:items-center gap-6 justify-between" style="background:#eef5f5; border-left: 3px solid #5e6c6c">
+        <div>
+          <p class="font-display font-medium text-slate-deeper text-lg mb-1">Currently operating a waiting list</p>
+          <p class="text-slate-dark/70 text-sm" style="font-family:'Inter',sans-serif; line-height:1.7">When fully occupied, new applicants are placed on our waiting list. Please enquire to register your interest — we'll be in touch as soon as a suitable berth becomes available.</p>
+        </div>
+        <a href="#contact" class="btn-primary flex-shrink-0">Join Waiting List</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════ VISITORS ══════════════════════════ -->
+  <section id="visitors" class="py-24 md:py-32 relative overflow-hidden" style="background:#1e2c2c">
+    <div class="absolute inset-0" style="background: radial-gradient(ellipse at 70% 30%, rgba(94,108,108,0.2) 0%, transparent 55%), radial-gradient(ellipse at 20% 80%, rgba(196,163,90,0.05) 0%, transparent 50%)"></div>
+    <div class="relative z-10 max-w-7xl mx-auto px-6 md:px-12">
+      <div class="grid md:grid-cols-2 gap-16 md:gap-24 items-center">
+
+        <div class="img-treatment rounded-sm overflow-hidden fade-in" style="height:480px">
+          <img src="https://placehold.co/800x960/3a4a4a/5e6c6c?text=." alt="Visitor moorings" class="w-full h-full object-cover" />
+          <div class="blend-layer"></div>
+        </div>
+
+        <div class="fade-in">
+          <p class="section-label mb-4">Visitor Moorings</p>
+          <div class="gold-divider mb-6"></div>
+          <h2 class="section-title text-4xl md:text-5xl font-display font-medium text-white mb-6">
+            Passing through the Broads?
+          </h2>
+          <p class="text-slate-light/70 mb-6" style="line-height:1.7; font-family:'Inter',sans-serif">
+            We typically have one or two visitor berths available for short stays — a quieter and more sheltered alternative to the public moorings at Coltishall Common. Fresh water is available on-site.
+          </p>
+
+          <!-- Pricing grid -->
+          <div class="grid grid-cols-2 gap-4 mb-8">
+            <div class="p-5 rounded-sm" style="background:rgba(255,255,255,0.05); border:1px solid rgba(197,216,216,0.12)">
+              <p class="text-gold text-3xl font-display font-medium mb-1">£15</p>
+              <p class="text-slate-light/60 text-xs tracking-wider uppercase" style="font-family:'Inter',sans-serif">Per night</p>
+            </div>
+            <div class="p-5 rounded-sm" style="background:rgba(255,255,255,0.05); border:1px solid rgba(197,216,216,0.12)">
+              <p class="text-white text-3xl font-display font-medium mb-1">2 nights</p>
+              <p class="text-slate-light/60 text-xs tracking-wider uppercase" style="font-family:'Inter',sans-serif">Maximum stay</p>
+            </div>
+          </div>
+
+          <ul class="text-slate-light/70 text-sm space-y-3 mb-8" style="font-family:'Inter',sans-serif; line-height:1.7">
+            <li class="flex items-start gap-3"><span class="text-gold mt-0.5 flex-shrink-0">✓</span> Departure by 11:00hrs</li>
+            <li class="flex items-start gap-3"><span class="text-gold mt-0.5 flex-shrink-0">✓</span> Fresh water tap &amp; hosepipe on-site</li>
+            <li class="flex items-start gap-3"><span class="text-gold mt-0.5 flex-shrink-0">✓</span> Advance booking strongly recommended during peak season</li>
+            <li class="flex items-start gap-3"><span class="text-gold mt-0.5 flex-shrink-0">✗</span> Electricity not available on visitor berths</li>
+            <li class="flex items-start gap-3"><span class="text-gold mt-0.5 flex-shrink-0">✓</span> Dogs welcome on the premises</li>
+          </ul>
+
+          <a href="#contact" class="btn-gold">Book a Visitor Berth</a>
+        </div>
+      </div>
+
+      <!-- Other services -->
+      <div class="mt-20 pt-16 border-t border-white/10 grid md:grid-cols-2 gap-8 fade-in">
+        <div class="p-8 rounded-sm" style="background:rgba(255,255,255,0.04); border:1px solid rgba(197,216,216,0.1)">
+          <p class="section-label mb-3">Day Fishing</p>
+          <h3 class="text-white text-xl font-display font-medium mb-3">Fishing Permits</h3>
+          <p class="text-slate-light/60 text-sm mb-4" style="line-height:1.7; font-family:'Inter',sans-serif">Day fishing permits for designated riverbank areas. Species include Perch, Roach, Bream, and Pike. Please contact us before setting up.</p>
+          <p class="text-gold text-2xl font-display font-medium">£10 <span class="text-sm text-slate-light/50" style="font-family:'Inter',sans-serif">per day</span></p>
+        </div>
+        <div class="p-8 rounded-sm" style="background:rgba(255,255,255,0.04); border:1px solid rgba(197,216,216,0.1)">
+          <p class="section-label mb-3">Motorhomes &amp; Caravans</p>
+          <h3 class="text-white text-xl font-display font-medium mb-3">Short-stay Pitches</h3>
+          <p class="text-slate-light/60 text-sm mb-4" style="line-height:1.7; font-family:'Inter',sans-serif">Limited short-term pitches are available for small to medium campervans and caravans. Advance booking required — contact us for availability and pricing.</p>
+          <a href="#contact" class="text-gold text-sm font-medium tracking-wide underline underline-offset-4 hover:text-gold-light transition-colors" style="font-family:'Inter',sans-serif">Enquire about pitches →</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════ FACILITIES ════════════════════════ -->
+  <section id="facilities" class="py-24 md:py-32 bg-white">
+    <div class="max-w-7xl mx-auto px-6 md:px-12">
+      <div class="max-w-xl mb-16 fade-in">
+        <p class="section-label mb-4">On-site Facilities</p>
+        <div class="gold-divider mb-6"></div>
+        <h2 class="section-title text-4xl md:text-5xl font-display font-medium text-slate-deeper mb-5">
+          Everything you need by the river
+        </h2>
+        <p class="text-slate-dark/75" style="line-height:1.7; font-family:'Inter',sans-serif">
+          Anchor Moorings is maintained to a high standard throughout the year. Private mooring holders benefit from full amenity access; visitor mooring guests have use of water and outdoor facilities.
+        </p>
+      </div>
+
+      <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+
+        <!-- Electricity -->
+        <div class="card p-6 rounded-sm fade-in" style="background:#f8fafa; box-shadow:0 1px 3px rgba(30,44,44,0.06), 0 8px 24px rgba(30,44,44,0.05)">
+          <div class="facility-icon mb-4">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#5e6c6c" stroke-width="1.8"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+          </div>
+          <h3 class="font-display font-medium text-slate-deeper text-lg mb-2">Electric Hook-up</h3>
+          <p class="text-slate-dark/65 text-sm" style="line-height:1.7; font-family:'Inter',sans-serif">Individually metered electric hook-up points available as an optional extra for long-term berth holders.</p>
+        </div>
+
+        <!-- Water -->
+        <div class="card p-6 rounded-sm fade-in" style="background:#f8fafa; box-shadow:0 1px 3px rgba(30,44,44,0.06), 0 8px 24px rgba(30,44,44,0.05)">
+          <div class="facility-icon mb-4">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#5e6c6c" stroke-width="1.8"><path d="M12 2 C12 2 5 10 5 15 a7 7 0 0 0 14 0 C19 10 12 2 12 2z"/></svg>
+          </div>
+          <h3 class="font-display font-medium text-slate-deeper text-lg mb-2">Fresh Water</h3>
+          <p class="text-slate-dark/65 text-sm" style="line-height:1.7; font-family:'Inter',sans-serif">Fresh water access point available to all berth holders and visitors. 50p per use for visitor top-ups.</p>
+        </div>
+
+        <!-- Showers -->
+        <div class="card p-6 rounded-sm fade-in" style="background:#f8fafa; box-shadow:0 1px 3px rgba(30,44,44,0.06), 0 8px 24px rgba(30,44,44,0.05)">
+          <div class="facility-icon mb-4">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#5e6c6c" stroke-width="1.8"><path d="M4 12h16M4 12 C4 6 20 6 20 12"/><path d="M4 12 l-1 6M20 12 l1 6"/><path d="M7 18 v2M12 18 v3M17 18 v2"/></svg>
+          </div>
+          <h3 class="font-display font-medium text-slate-deeper text-lg mb-2">Heated Showers</h3>
+          <p class="text-slate-dark/65 text-sm" style="line-height:1.7; font-family:'Inter',sans-serif">Two private, heated shower and toilet rooms with keycode entry — included in annual mooring fees for private berth holders.</p>
+        </div>
+
+        <!-- Outdoor space -->
+        <div class="card p-6 rounded-sm fade-in" style="background:#f8fafa; box-shadow:0 1px 3px rgba(30,44,44,0.06), 0 8px 24px rgba(30,44,44,0.05)">
+          <div class="facility-icon mb-4">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#5e6c6c" stroke-width="1.8"><circle cx="12" cy="12" r="4"/><line x1="12" y1="2" x2="12" y2="4"/><line x1="12" y1="20" x2="12" y2="22"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="2" y1="12" x2="4" y2="12"/><line x1="20" y1="12" x2="22" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+          </div>
+          <h3 class="font-display font-medium text-slate-deeper text-lg mb-2">Picnic &amp; Outdoor Areas</h3>
+          <p class="text-slate-dark/65 text-sm" style="line-height:1.7; font-family:'Inter',sans-serif">Open grassed area, picnic tables, waterside benches, and mature shady trees — a pleasant spot to relax on the riverbank.</p>
+        </div>
+
+        <!-- Marine engineer -->
+        <div class="card p-6 rounded-sm fade-in" style="background:#f8fafa; box-shadow:0 1px 3px rgba(30,44,44,0.06), 0 8px 24px rgba(30,44,44,0.05)">
+          <div class="facility-icon mb-4">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#5e6c6c" stroke-width="1.8"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>
+          </div>
+          <h3 class="font-display font-medium text-slate-deeper text-lg mb-2">Marine Engineer</h3>
+          <p class="text-slate-dark/65 text-sm" style="line-height:1.7; font-family:'Inter',sans-serif">On-site marine engineer available for boat maintenance, repairs, and winterisation services throughout the year.</p>
+        </div>
+
+        <!-- Dogs welcome -->
+        <div class="card p-6 rounded-sm fade-in" style="background:#f8fafa; box-shadow:0 1px 3px rgba(30,44,44,0.06), 0 8px 24px rgba(30,44,44,0.05)">
+          <div class="facility-icon mb-4">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#5e6c6c" stroke-width="1.8"><path d="M10 5.172C10 3.782 8.423 2.679 6.5 3c-2.823.47-4.113 6.006-4 7 .08.703 1.725 1.722 3.656 2.299M14.5 5.82c.559-.517.968-1.111 1.5-1.82"/><path d="M20 4v.01M17 3v.01"/><path d="M3 21c3.333-1 5-2.667 5-5H5c0-5.667 6.667-8 9-8 4.5 0 6 3 6 5 0 3.5-2 5.5-4 6.5l-1.5.5"/><path d="M10 21c-1.333-2.667-1.333-5 0-6l4 .5"/></svg>
+          </div>
+          <h3 class="font-display font-medium text-slate-deeper text-lg mb-2">Dogs Welcome</h3>
+          <p class="text-slate-dark/65 text-sm" style="line-height:1.7; font-family:'Inter',sans-serif">Well-behaved dogs are welcome on the site. Coltishall and the surrounding riverside walks are excellent for dog owners.</p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════ LOCATION ══════════════════════════ -->
+  <section id="location" class="py-24 md:py-32 relative overflow-hidden grain" style="background:#1e2c2c">
+    <div class="absolute inset-0" style="background: radial-gradient(ellipse at 30% 60%, rgba(94,108,108,0.15) 0%, transparent 55%)"></div>
+    <div class="relative z-10 max-w-7xl mx-auto px-6 md:px-12">
+      <div class="grid md:grid-cols-2 gap-16 md:gap-24 items-start">
+
+        <div class="fade-in">
+          <p class="section-label mb-4">Location</p>
+          <div class="gold-divider mb-6"></div>
+          <h2 class="section-title text-4xl md:text-5xl font-display font-medium text-white mb-6">
+            Gateway to the<br/>Norfolk Broads
+          </h2>
+          <p class="text-slate-light/70 mb-6" style="line-height:1.7; font-family:'Inter',sans-serif">
+            Coltishall sits at the navigable head of the River Bure — one of the Broads' most scenic stretches. The village is within the Norfolk Broads National Park, surrounded by protected wetlands, reed beds, and open skies.
+          </p>
+          <p class="text-slate-light/60 mb-10" style="line-height:1.7; font-family:'Inter',sans-serif">
+            From Anchor Moorings, you can cruise south-east through Wroxham and on to the wider Broads network — Ranworth, Acle, and beyond. The upper Bure between Coltishall and Wroxham is known for its unspoilt character and quieter cruising conditions.
+          </p>
+
+          <!-- Address card -->
+          <div class="p-6 rounded-sm mb-8" style="background:rgba(255,255,255,0.05); border:1px solid rgba(197,216,216,0.12)">
+            <p class="text-slate-light/50 text-xs tracking-widest uppercase mb-3" style="font-family:'Inter',sans-serif">Find Us</p>
+            <p class="text-white font-medium mb-1" style="font-family:'Inter',sans-serif">Anchor Moorings</p>
+            <p class="text-slate-light/70 text-sm" style="font-family:'Inter',sans-serif; line-height:1.7">20 Anchor Street<br/>Coltishall, Norfolk<br/>NR12 7AQ</p>
+          </div>
+        </div>
+
+        <div class="fade-in space-y-6">
+          <!-- Village amenities -->
+          <div class="p-6 rounded-sm" style="background:rgba(255,255,255,0.04); border:1px solid rgba(197,216,216,0.1)">
+            <p class="section-label mb-4">Village Amenities</p>
+            <div class="grid grid-cols-2 gap-x-6 gap-y-2 text-sm text-slate-light/65" style="font-family:'Inter',sans-serif; line-height:1.7">
+              <div>
+                <p class="text-slate-light/40 text-xs uppercase tracking-wider mb-2">Pubs &amp; Dining</p>
+                <p>Rising Sun</p>
+                <p>Kings Head</p>
+                <p>The Red Lion</p>
+                <p>The Recruiting Sergeant</p>
+                <p>Jason's Fish &amp; Chips</p>
+                <p>The Peking Blossom</p>
+                <p>Ali Spice</p>
+              </div>
+              <div>
+                <p class="text-slate-light/40 text-xs uppercase tracking-wider mb-2">Local Services</p>
+                <p>Village shops</p>
+                <p>Post office</p>
+                <p>Coltishall Common</p>
+                <p class="mt-3 text-slate-light/40 text-xs uppercase tracking-wider">Transport</p>
+                <p class="mt-2">Buses to Norwich</p>
+                <p>Bure Valley Railway</p>
+                <p>Rail via Wroxham</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Map placeholder -->
+          <div class="rounded-sm overflow-hidden" style="height:240px; background:#2a3c3c; border:1px solid rgba(197,216,216,0.1)">
+            <div class="w-full h-full flex items-center justify-center">
+              <div class="text-center">
+                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#5e6c6c" stroke-width="1.5" class="mx-auto mb-3"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+                <p class="text-slate-light/30 text-sm" style="font-family:'Inter',sans-serif">Coltishall, Norfolk NR12 7AQ</p>
+                <a href="https://maps.google.com/?q=20+Anchor+Street+Coltishall+Norfolk+NR12+7AQ" target="_blank" rel="noopener" class="text-gold text-xs mt-2 inline-block hover:underline" style="font-family:'Inter',sans-serif">Open in Google Maps →</a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════ ABOUT ════════════════════════════ -->
+  <section id="about" class="py-24 md:py-32 bg-white">
+    <div class="max-w-7xl mx-auto px-6 md:px-12">
+      <div class="grid md:grid-cols-2 gap-16 md:gap-24 items-center">
+
+        <div class="img-treatment rounded-sm overflow-hidden fade-in" style="height:520px">
+          <img src="https://placehold.co/800x1040/5e6c6c/eef5f5?text=." alt="The mooring site" class="w-full h-full object-cover" />
+          <div class="blend-layer"></div>
+        </div>
+
+        <div class="fade-in">
+          <p class="section-label mb-4">About Us</p>
+          <div class="gold-divider mb-6"></div>
+          <h2 class="section-title text-4xl md:text-5xl font-display font-medium text-slate-deeper mb-6">
+            A family-run<br/>riverside site
+          </h2>
+          <p class="text-slate-dark/80 mb-5" style="line-height:1.7; font-family:'Inter',sans-serif; font-size:1.0625rem">
+            Anchor Moorings has its roots in the Anchor Hotel — a pub established in 1836 by the Coltishall Brewery, which stood on this site before being converted to residential use around 1985.
+          </p>
+          <p class="text-slate-dark/70 mb-5" style="line-height:1.7; font-family:'Inter',sans-serif">
+            Lenny and Fran Howard purchased the property in 1994 and over the following years carefully landscaped and developed the riverside grounds into the moorings site you see today — including new quay headings installed in 2013.
+          </p>
+          <p class="text-slate-dark/70 mb-8" style="line-height:1.7; font-family:'Inter',sans-serif">
+            The site is now in the care of Sam, Michelle, and Scott — continuing the family tradition of providing a welcoming, well-maintained mooring for the boating community on the Norfolk Broads.
+          </p>
+          <a href="#contact" class="btn-outline">Get in Touch</a>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════ CONTACT ═══════════════════════════ -->
+  <section id="contact" class="py-24 md:py-32 relative overflow-hidden grain" style="background:#1e2c2c">
+    <div class="absolute inset-0" style="background: radial-gradient(ellipse at 80% 20%, rgba(196,163,90,0.07) 0%, transparent 50%), radial-gradient(ellipse at 20% 80%, rgba(94,108,108,0.2) 0%, transparent 55%)"></div>
+
+    <div class="relative z-10 max-w-7xl mx-auto px-6 md:px-12">
+      <div class="grid md:grid-cols-2 gap-16 md:gap-24">
+
+        <!-- Contact info -->
+        <div class="fade-in">
+          <p class="section-label mb-4">Contact</p>
+          <div class="gold-divider mb-6"></div>
+          <h2 class="section-title text-4xl md:text-5xl font-display font-medium text-white mb-6">
+            Ready to enquire?
+          </h2>
+          <p class="text-slate-light/70 mb-10" style="line-height:1.7; font-family:'Inter',sans-serif">
+            Whether you're interested in a long-term mooring, a short visitor berth, a day fishing permit, or a motorhome pitch — we're happy to help. Get in touch and we'll respond as soon as possible.
+          </p>
+
+          <div class="space-y-5">
+            <div class="flex items-start gap-4">
+              <div class="mt-1 p-2 rounded-full flex-shrink-0" style="background:rgba(94,108,108,0.2)">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#c4a35a" stroke-width="2"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.81 19.79 19.79 0 01.01 1.18 2 2 0 012 .01h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.09 7.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 14.92z"/></svg>
+              </div>
+              <div>
+                <p class="text-slate-light/40 text-xs tracking-wider uppercase mb-1" style="font-family:'Inter',sans-serif">Phone</p>
+                <a href="tel:01603737400" class="text-white font-medium hover:text-gold transition-colors" style="font-family:'Inter',sans-serif">01603 737400</a>
+                <p class="text-slate-light/50 text-sm mt-0.5" style="font-family:'Inter',sans-serif">Sam: <a href="tel:07900746705" class="hover:text-gold transition-colors">07900 746705</a></p>
+                <p class="text-slate-light/50 text-sm" style="font-family:'Inter',sans-serif">Jamie: <a href="tel:07399715298" class="hover:text-gold transition-colors">07399 715298</a></p>
+              </div>
+            </div>
+
+            <div class="flex items-start gap-4">
+              <div class="mt-1 p-2 rounded-full flex-shrink-0" style="background:rgba(94,108,108,0.2)">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#c4a35a" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+              </div>
+              <div>
+                <p class="text-slate-light/40 text-xs tracking-wider uppercase mb-1" style="font-family:'Inter',sans-serif">Address</p>
+                <p class="text-white" style="font-family:'Inter',sans-serif; line-height:1.7">20 Anchor Street<br/>Coltishall, Norfolk<br/>NR12 7AQ</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Enquiry form -->
+        <div class="fade-in">
+          <form class="space-y-5" onsubmit="handleSubmit(event)">
+            <div class="grid grid-cols-2 gap-4">
+              <div>
+                <label class="form-label">First name</label>
+                <input type="text" class="form-input" placeholder="Jane" autocomplete="given-name" required />
+              </div>
+              <div>
+                <label class="form-label">Last name</label>
+                <input type="text" class="form-input" placeholder="Smith" autocomplete="family-name" required />
+              </div>
+            </div>
+            <div>
+              <label class="form-label">Email</label>
+              <input type="email" class="form-input" placeholder="jane@example.com" autocomplete="email" required />
+            </div>
+            <div>
+              <label class="form-label">Phone</label>
+              <input type="tel" class="form-input" placeholder="07700 000000" autocomplete="tel" />
+            </div>
+            <div>
+              <label class="form-label">Enquiry type</label>
+              <select class="form-input">
+                <option value="">Select an enquiry type…</option>
+                <option>Long-term Mooring Availability</option>
+                <option>Waiting List Registration</option>
+                <option>24hr Visitor Mooring Booking</option>
+                <option>Day Fishing Permit</option>
+                <option>Motorhome / Caravan Pitch</option>
+                <option>General Enquiry</option>
+              </select>
+            </div>
+            <div>
+              <label class="form-label">Boat details <span class="text-slate-light/30 normal-case font-normal">(if applicable)</span></label>
+              <input type="text" class="form-input" placeholder="e.g. 32ft cruiser — Broom Ocean 37" />
+            </div>
+            <div>
+              <label class="form-label">Message</label>
+              <textarea class="form-input resize-none" rows="4" placeholder="Tell us anything else we should know…"></textarea>
+            </div>
+            <div class="pt-2">
+              <button type="submit" class="btn-gold w-full text-center">Send Enquiry</button>
+            </div>
+          </form>
+
+          <div id="form-success" class="hidden mt-6 p-5 rounded-sm text-center" style="background:rgba(94,108,108,0.15); border:1px solid rgba(197,216,216,0.2)">
+            <p class="text-white font-medium mb-1" style="font-family:'Inter',sans-serif">Message received — thank you</p>
+            <p class="text-slate-light/60 text-sm" style="font-family:'Inter',sans-serif">We'll be in touch as soon as possible.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════ FOOTER ════════════════════════════ -->
+  <footer style="background:#111c1c; border-top:1px solid rgba(197,216,216,0.08)">
+    <div class="max-w-7xl mx-auto px-6 md:px-12 py-12 flex flex-col md:flex-row items-start md:items-center justify-between gap-8">
+      <div>
+        <p class="font-display font-medium text-white text-lg mb-1">Anchor Moorings</p>
+        <p class="text-slate-light/40 text-sm" style="font-family:'Inter',sans-serif">River Bure · Coltishall · Norfolk Broads</p>
+      </div>
+      <nav class="flex flex-wrap gap-x-8 gap-y-3">
+        <a href="#moorings"   class="text-slate-light/50 hover:text-white text-sm transition-colors" style="font-family:'Inter',sans-serif">Moorings</a>
+        <a href="#visitors"   class="text-slate-light/50 hover:text-white text-sm transition-colors" style="font-family:'Inter',sans-serif">Visitors</a>
+        <a href="#facilities" class="text-slate-light/50 hover:text-white text-sm transition-colors" style="font-family:'Inter',sans-serif">Facilities</a>
+        <a href="#location"   class="text-slate-light/50 hover:text-white text-sm transition-colors" style="font-family:'Inter',sans-serif">Location</a>
+        <a href="#about"      class="text-slate-light/50 hover:text-white text-sm transition-colors" style="font-family:'Inter',sans-serif">About</a>
+        <a href="#contact"    class="text-slate-light/50 hover:text-white text-sm transition-colors" style="font-family:'Inter',sans-serif">Contact</a>
+      </nav>
+      <p class="text-slate-light/25 text-xs" style="font-family:'Inter',sans-serif">© 2026 Anchor Moorings</p>
+    </div>
+  </footer>
+
+  <!-- ═══════════════════════════════ SCRIPTS ═══════════════════════════ -->
+  <script>
+    // Nav scroll state
+    const nav = document.getElementById('nav');
+    window.addEventListener('scroll', () => {
+      nav.classList.toggle('scrolled', window.scrollY > 60);
+    }, { passive: true });
+
+    // Mobile menu
+    const menuToggle = document.getElementById('menu-toggle');
+    const mobileMenu = document.getElementById('mobile-menu');
+    const iconOpen   = document.getElementById('menu-icon-open');
+    const iconClose  = document.getElementById('menu-icon-close');
+    let menuOpen = false;
+
+    function closeMenu() {
+      menuOpen = false;
+      mobileMenu.style.opacity = '0';
+      mobileMenu.style.transform = 'translateY(-8px)';
+      mobileMenu.style.pointerEvents = 'none';
+      iconOpen.classList.remove('hidden');
+      iconClose.classList.add('hidden');
+      menuToggle.setAttribute('aria-expanded', 'false');
+    }
+
+    menuToggle.addEventListener('click', () => {
+      menuOpen = !menuOpen;
+      if (menuOpen) {
+        mobileMenu.style.opacity = '1';
+        mobileMenu.style.transform = 'translateY(0)';
+        mobileMenu.style.pointerEvents = 'auto';
+        iconOpen.classList.add('hidden');
+        iconClose.classList.remove('hidden');
+        menuToggle.setAttribute('aria-expanded', 'true');
+      } else {
+        closeMenu();
+      }
+    });
+
+    // Scroll fade-in
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.12 });
+
+    document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+
+    // Form submit demo
+    function handleSubmit(e) {
+      e.preventDefault();
+      const form = e.target;
+      form.style.opacity = '0.4';
+      form.style.pointerEvents = 'none';
+      document.getElementById('form-success').classList.remove('hidden');
+    }
+  </script>
+</body>
+</html>
