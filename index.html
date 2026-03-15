@@ -527,15 +527,18 @@
             </div>
           </div>
 
-          <!-- Map placeholder -->
-          <div class="rounded-sm overflow-hidden" style="height:240px; background:#2a3c3c; border:1px solid rgba(197,216,216,0.1)">
-            <div class="w-full h-full flex items-center justify-center">
-              <div class="text-center">
-                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#5e6c6c" stroke-width="1.5" class="mx-auto mb-3"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
-                <p class="text-slate-light/30 text-sm" style="font-family:'Inter',sans-serif">Coltishall, Norfolk NR12 7AQ</p>
-                <a href="https://maps.google.com/?q=20+Anchor+Street+Coltishall+Norfolk+NR12+7AQ" target="_blank" rel="noopener" class="text-gold text-xs mt-2 inline-block hover:underline" style="font-family:'Inter',sans-serif">Open in Google Maps →</a>
-              </div>
-            </div>
+          <!-- Interactive Google Maps embed -->
+          <div class="rounded-sm overflow-hidden" style="height:240px; border:1px solid rgba(197,216,216,0.1)">
+            <iframe
+              title="Anchor Moorings location"
+              src="https://maps.google.com/maps?q=20+Anchor+St,+Coltishall,+Norwich+NR12+7AQ,+UK&output=embed&z=16"
+              width="100%"
+              height="100%"
+              style="border:0; display:block; filter:saturate(0.7) contrast(1.05)"
+              allowfullscreen=""
+              loading="lazy"
+              referrerpolicy="no-referrer-when-downgrade">
+            </iframe>
           </div>
         </div>
 
