@@ -809,14 +809,8 @@
 
   <!-- ═══════════════════════════════ SCRIPTS ═══════════════════════════ -->
   <script>
-    // ── Formspree configuration ──────────────────────────────────────────
-    // HOW TO SET UP (takes about 2 minutes):
-    //   1. Go to https://formspree.io and click "Get Started Free"
-    //   2. Sign up with any email
-    //   3. Click "New Form", give it a name, set the email to anchormoorings@gmail.com
-    //   4. Copy the form endpoint — it looks like: https://formspree.io/f/abcdefgh
-    //   5. Paste it below, replacing the placeholder value
-    const FORMSPREE_ENDPOINT = 'https://formspree.io/f/YOUR_FORM_ID';
+    // ── Form endpoint ────────────────────────────────────────────────────
+    const FORM_ENDPOINT = 'https://formsubmit.co/ajax/sam@angliangrab.com';
 
     // ── Dynamic copyright year ───────────────────────────────────────────
     document.getElementById('footer-year').textContent = new Date().getFullYear();
@@ -882,10 +876,10 @@
       btn.style.opacity = '0.7';
 
       try {
-        const res = await fetch(FORMSPREE_ENDPOINT, {
+        const res = await fetch(FORM_ENDPOINT, {
           method: 'POST',
-          body: new FormData(form),
-          headers: { 'Accept': 'application/json' }
+          headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+          body: JSON.stringify(Object.fromEntries(new FormData(form)))
         });
         if (!res.ok) throw new Error('Server error');
         form.style.opacity = '0.3';
